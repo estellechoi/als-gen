@@ -5,6 +5,7 @@ module.exports = {
     },
     extends: [
       "eslint:recommended",
+      "plugin:json/recommended"
     ],
     plugins: ["prettier"],
     parserOptions: {
