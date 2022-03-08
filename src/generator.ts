@@ -40,18 +40,7 @@ const randIndexBelow = (limit: number): number => Math.floor(Math.random() * lim
  */
 const refineRarity = (traitTarget: TraitTarget, trait: Trait): Trait => {
     if (ALSs.length > 0 && trait.rare) {
-        
-        const refine = (traits: Trait[], totalRareTraits: number, MAX_NUM_OF_RARITY: number): Trait => {
-            totalRareTraits += 1
-
-            if (totalRareTraits > MAX_NUM_OF_RARITY) {
-                totalRareTraits -= 1
-                // infinite recursive call would not happen since the possibility that same traits are picked continuously is pretty low.
-                return refineRarity(traitTarget, traits[randIndexBelow(traits.length)])
-            }
-            return trait
-        }
-        
+                
         switch (traitTarget) {
             case TraitTarget.Face: 
                 totalFaceRareTraits += 1
