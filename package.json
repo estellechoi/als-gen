@@ -4,10 +4,11 @@
   "main": "index.js",
   "author": "Yujin Choi",
   "license": "MIT",
+  "type": "module",
   "devDependencies": {
+    "@types/node": "^17.0.21",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.13.0",
-    "canvas": "^2.9.0",
     "eslint": "^8.10.0",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -18,6 +19,11 @@
   },
   "scripts": {
     "prepare": "husky install",
-    "lint": "eslint"
+    "lint": "eslint",
+    "start": "tsc && yarn lint && node --experimental-specifier-resolution=node --trace-warnings dist/generator"
+  },
+  "dependencies": {
+    "canvas": "^2.9.0",
+    "nft.storage": "^6.0.2"
   }
 }

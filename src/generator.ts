@@ -1,5 +1,9 @@
+import * as fs from 'fs'
+import * as constants from './constants'
+import { createImage } from './draw'
+import { getGatewayUrlByToken } from './nftStorage'
 import { background, body, face, Trait } from './traits'
-import { NftTobe } from './types/generator'
+import { NftTobe } from './types/common'
 
 const TARGET_NUM_OF_NFT = 100
 const RARE_FACE_TRAIT_ID = 7
@@ -66,10 +70,34 @@ const generateALSs = () => {
     }
 }
 
+const createALSImages = () => {
+    ALSs.forEach(async (ALS, index) => {
+        console.log('Creating an image...')
+        await createImage(ALS, index)
+    })
+}
+
+/**
+ * convert ipfs uris to https gateway urls in meta.txt file to fetch via web later
+ * to see flags available, check out https://nodejs.org/api/fs.html#file-system-flags
+ */
+const convertMetafileToGatewayUrl = () => {
+    ALSs.forEach(async (_, index) => {
+        const gatewayUrl = await getGatewayUrlByToken(index + 1, `./${constants.META_FILE_NAME}.txt`)
+        const fileName = `${constants.META_FILE_NAME}.href.txt`
+        fs.writeFileSync(fileName, `${gatewayUrl}\r\n`, { flag: 'a+' })
+        // a+ flag opens file for reading and appending. The file is created if it does not exist.
+    })
+}
+
 generateALSs()
 
-console.log(`TOTAL_NUM_OF_NFT = ${ALSs.length}`);
-console.log(`TOTAL_NUM_OF_RARITY = ${totalFaceRareTraits}`);
+console.log(`TOTAL_NUM_OF_NFT = ${ALSs.length}`)
+console.log(`TOTAL_NUM_OF_RARITY = ${totalFaceRareTraits}`)
+
+createALSImages()
+convertMetafileToGatewayUrl()
+
 
 
 
