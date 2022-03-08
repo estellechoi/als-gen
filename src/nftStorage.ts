@@ -1,9 +1,10 @@
 import * as fs from 'fs';
 import { File, NFTStorage, toGatewayURL } from 'nft.storage';
 import * as constants from './constants';
-import { background, body, face } from './traits';
-import { NftTobe } from './types/common';
+import { background, earings, eyes, eyewears, face, hair, lips, nose } from './traits';
+import { NftTobe, TraitTarget } from './types/common';
 import * as utils from './utils';
+
 
 const FILE_PATH = constants.FILE_PATH
 const FILE_FORMAT = constants.FILE_FORMAT
@@ -27,21 +28,40 @@ interface OpenseaAttributes {
 }
 
 const getOpenseaAttributes = (traitId: number, k: number): OpenseaAttributes => {
-    const attributes: OpenseaAttributes = { trait_type: '', value: '' }
     let trait_type: string
     let value: string
 
     switch(k) {
         case 0:
-            trait_type = 'face'
+            trait_type = TraitTarget.Face
             value = face[traitId - 1].name
             break
         case 1:
-            trait_type = 'body'
-            value = body[traitId - 1].name
+            trait_type = TraitTarget.Hair
+            value = hair[traitId - 1].name
             break
         case 2:
-            trait_type = 'background'
+            trait_type = TraitTarget.Eyes
+            value = eyes[traitId - 1].name
+            break
+        case 3:
+            trait_type = TraitTarget.Nose
+            value = nose[traitId - 1].name
+            break
+        case 4:
+            trait_type = TraitTarget.Lips
+            value = lips[traitId - 1].name
+            break
+        case 5:
+            trait_type = TraitTarget.Eyewears
+            value = eyewears[traitId - 1].name
+            break
+        case 6:
+            trait_type = TraitTarget.Earings
+            value = earings[traitId - 1].name
+            break                
+        case 7:
+            trait_type = TraitTarget.Background
             value = background[traitId - 1].name
             break
         default:
@@ -49,10 +69,7 @@ const getOpenseaAttributes = (traitId: number, k: number): OpenseaAttributes => 
             value = ''
     }
 
-    attributes.trait_type = trait_type
-    attributes.value = value
-    
-    return attributes
+    return { trait_type, value }
 }
 
 export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<string> => {
@@ -79,7 +96,7 @@ export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<strin
         attributes: []
     }
 
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < 8; i += 1) {
         const attributes = getOpenseaAttributes(ALS[i], i)
         openseaMetaData.attributes.push(attributes)
     }

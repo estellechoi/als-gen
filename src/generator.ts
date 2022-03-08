@@ -2,15 +2,29 @@ import * as fs from 'fs'
 import * as constants from './constants'
 import { createImage } from './draw'
 import { getGatewayUrlByToken } from './nftStorage'
-import { background, body, face, Trait } from './traits'
-import { NftTobe } from './types/common'
+import { background, earings, eyes, eyewears, face, hair, lips, nose, Trait } from './traits'
+import { NftTobe, TraitTarget } from './types/common'
 
 const TARGET_NUM_OF_NFT = 100
-const RARE_FACE_TRAIT_ID = 7
-const MAX_NUM_OF_FACE_RARITY = 2
+const MAX_NUM_OF_FACE_RARITY = 1
+const MAX_NUM_OF_HAIR_RARITY = 2
+const MAX_NUM_OF_EYES_RARITY = 3
+const MAX_NUM_OF_NOSE_RARITY = 1
+const MAX_NUM_OF_LIPS_RARITY = 3
+const MAX_NUM_OF_EYEWEARS_RARITY = 2
+const MAX_NUM_OF_EARINGS_RARITY = 4
+const MAX_NUM_OF_BG_RARITY = 10
 
 const ALSs: NftTobe[] = new Array(TARGET_NUM_OF_NFT)
 let totalFaceRareTraits = 0
+let totalHairRareTraits = 0
+let totalEyesRareTraits = 0
+let totalNoseRareTraits = 0
+let totalLipsRareTraits = 0
+let totalEyewearsRareTraits = 0
+let totalEaringsRareTraits = 0
+let totalBgRareTraits = 0
+
 
 /**
  * 
@@ -22,24 +36,54 @@ const randIndexBelow = (limit: number): number => Math.floor(Math.random() * lim
 /**
  * 
  * @param traitTarget 
- * @param id 
- * @param RARE_TRAIT_ID 
- * @param MAX_NUM_OF_RARITY 
- * @returns the trait id refined
+ * @param trait 
+ * @returns final NFT tobe
  */
-const refineRarity = (traitTarget: Trait[], id: number, RARE_TRAIT_ID: number, MAX_NUM_OF_RARITY: number): number => {
-    if (ALSs.length > 0 && id === RARE_TRAIT_ID) {
-        totalFaceRareTraits += 1
+const refineRarity = (traitTarget: TraitTarget, trait: Trait): Trait => {
+    if (ALSs.length > 0 && trait.rare) {
         
-        if (totalFaceRareTraits > MAX_NUM_OF_RARITY) {
-            totalFaceRareTraits -= 1
-            // infinite recursive call would not happen since the possibility that same traits are picked continuously is pretty low.
-            return refineRarity(traitTarget, traitTarget[randIndexBelow(traitTarget.length)].id, RARE_TRAIT_ID, MAX_NUM_OF_RARITY)
-        }
-        return id
-    }
+        const refine = (traits: Trait[], totalRareTraits: number, MAX_NUM_OF_RARITY: number): Trait => {
+            totalRareTraits += 1
 
-    return id
+            if (totalRareTraits > MAX_NUM_OF_RARITY) {
+                totalRareTraits -= 1
+                // infinite recursive call would not happen since the possibility that same traits are picked continuously is pretty low.
+                return refineRarity(traitTarget, traits[randIndexBelow(traits.length)])
+            }
+            return trait
+        }
+        
+        switch (traitTarget) {
+            case TraitTarget.Face: 
+                refine(face, totalFaceRareTraits, MAX_NUM_OF_FACE_RARITY)
+                break
+            case TraitTarget.Hair: 
+                refine(hair, totalHairRareTraits, MAX_NUM_OF_HAIR_RARITY)
+                break
+            case TraitTarget.Eyes: 
+                refine(eyes, totalEyesRareTraits, MAX_NUM_OF_EYES_RARITY)
+                break
+            case TraitTarget.Nose: 
+                refine(nose, totalNoseRareTraits, MAX_NUM_OF_NOSE_RARITY)
+                break
+            case TraitTarget.Lips: 
+                refine(lips, totalLipsRareTraits, MAX_NUM_OF_LIPS_RARITY)
+                break
+            case TraitTarget.Eyewears: 
+                refine(eyewears, totalEyewearsRareTraits, MAX_NUM_OF_EYEWEARS_RARITY)
+                break
+            case TraitTarget.Earings: 
+                refine(earings, totalEaringsRareTraits, MAX_NUM_OF_EARINGS_RARITY)
+                break
+            case TraitTarget.Background: 
+                refine(background, totalBgRareTraits, MAX_NUM_OF_BG_RARITY)
+                break
+            default:
+                return trait
+        }
+    }
+    
+    return trait
 }
 
 /**
@@ -49,10 +93,15 @@ const refineRarity = (traitTarget: Trait[], id: number, RARE_TRAIT_ID: number, M
  */
 const generateALS = (ALSs: NftTobe[]): NftTobe | null => {
     const nftTobe: NftTobe = []
-
-    nftTobe.push(refineRarity(face, face[randIndexBelow(face.length)].id, RARE_FACE_TRAIT_ID, MAX_NUM_OF_FACE_RARITY))
-    nftTobe.push(body[randIndexBelow(body.length)].id)
-    nftTobe.push(background[randIndexBelow(background.length)].id)
+    
+    nftTobe.push(refineRarity(TraitTarget.Face, face[randIndexBelow(face.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Hair, hair[randIndexBelow(hair.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Eyes, eyes[randIndexBelow(eyes.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Nose, nose[randIndexBelow(nose.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Lips, lips[randIndexBelow(lips.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Eyewears, eyewears[randIndexBelow(eyewears.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Earings, earings[randIndexBelow(earings.length)]).id)
+    nftTobe.push(refineRarity(TraitTarget.Background, background[randIndexBelow(background.length)]).id)
     
     const isRedundant = ALSs.some((item: NftTobe) => JSON.stringify(item) === JSON.stringify(nftTobe))
     return isRedundant? null : nftTobe
