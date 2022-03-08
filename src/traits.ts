@@ -5,18 +5,14 @@ export interface Trait {
 }
 
 export const face: Trait[] = [
-    {id: 1, name: 'chocolate-angular', rare: false},
-    {id: 2, name: 'chocolate-beard', rare: false},
-    {id: 3, name: 'chocolate-v', rare: false},
-    {id: 4, name: 'bronzed-angular', rare: false},
-    {id: 5, name: 'bronzed-beard', rare: false},
-    {id: 6, name: 'bronzed-v', rare: false},
-    {id: 7, name: 'bread-angular', rare: false},
-    {id: 8, name: 'bread-beard', rare: false},
-    {id: 9, name: 'bread-v', rare: false},
-    {id: 10, name: 'pale-angular', rare: false},
-    {id: 11, name: 'pale-beard', rare: false},
-    {id: 12, name: 'pale-v', rare: false},
+    {id: 1, name: 'chocolate-beard', rare: true},
+    {id: 2, name: 'chocolate-v', rare: false},
+    {id: 3, name: 'bronzed-v', rare: false},
+    {id: 4, name: 'bread-beard', rare: false},
+    {id: 5, name: 'bread-v', rare: false},
+    {id: 6, name: 'pale-beard', rare: false},
+    {id: 7, name: 'pale-v', rare: false},
+    {id: 8, name: 'pink', rare: true},
 ]
 
 export const hair: Trait[] = [
@@ -33,16 +29,16 @@ export const hair: Trait[] = [
     {id: 11, name: 'long-straight-brown', rare: false},
     {id: 12, name: 'long-curly-black', rare: false},
     {id: 13, name: 'black-pony-tale', rare: false},
-    {id: 14, name: 'black-top-bun', rare: false},
+    {id: 14, name: 'shaved-white', rare: false},
     {id: 15, name: 'black-fedora', rare: false},
     {id: 16, name: 'black-fedora-w-long-blond', rare: false},
     {id: 17, name: 'white-cap', rare: false},
-    {id: 18, name: 'black-beanie', rare: false},
+    {id: 18, name: 'green-beanie', rare: false},
     {id: 19, name: 'pink-bandana', rare: true},
     {id: 20, name: 'bobbed-pink', rare: true},
-    {id: 21, name: 'white-hairband', rare: true},
-    {id: 22, name: 'long-straight-red', rare: true},
-    {id: 23, name: 'shaven-red', rare: true},
+    {id: 21, name: 'tennis-band', rare: true},
+    {id: 22, name: 'shaven-black', rare: true},
+    {id: 23, name: 'gentleman-brown', rare: true},
     {id: 24, name: 'shaven-green', rare: false},
 ]
 
@@ -62,9 +58,9 @@ export const nose: Trait[] = [
 
 export const lips: Trait[] = [
     {id: 1, name: 'normal', rare: false},
-    {id: 2, name: 'pink', rare: false},
-    {id: 3, name: 'red', rare: false},
-    {id: 4, name: 'brown', rare: true},
+    {id: 2, name: 'pink', rare: true},
+    {id: 3, name: 'red', rare: true},
+    {id: 4, name: 'brown', rare: false},
     {id: 5, name: 'coral', rare: false},
     {id: 6, name: 'blue', rare: true},
 ]

@@ -5,15 +5,15 @@ import { getGatewayUrlByToken } from './nftStorage'
 import { background, earings, eyes, eyewears, face, hair, lips, nose, Trait } from './traits'
 import { NftTobe, TraitTarget } from './types/common'
 
-const TARGET_NUM_OF_NFT = 100
-const MAX_NUM_OF_FACE_RARITY = 1
-const MAX_NUM_OF_HAIR_RARITY = 2
-const MAX_NUM_OF_EYES_RARITY = 3
-const MAX_NUM_OF_NOSE_RARITY = 1
-const MAX_NUM_OF_LIPS_RARITY = 3
-const MAX_NUM_OF_EYEWEARS_RARITY = 2
-const MAX_NUM_OF_EARINGS_RARITY = 4
-const MAX_NUM_OF_BG_RARITY = 10
+const TARGET_NUM_OF_NFT = 500
+const MAX_NUM_OF_FACE_RARITY = 12
+const MAX_NUM_OF_HAIR_RARITY = 10
+const MAX_NUM_OF_EYES_RARITY = 10
+const MAX_NUM_OF_NOSE_RARITY = 10
+const MAX_NUM_OF_LIPS_RARITY = 20
+const MAX_NUM_OF_EYEWEARS_RARITY = 40
+const MAX_NUM_OF_EARINGS_RARITY = 40
+const MAX_NUM_OF_BG_RARITY = 100
 
 const ALSs: NftTobe[] = new Array(TARGET_NUM_OF_NFT)
 let totalFaceRareTraits = 0
