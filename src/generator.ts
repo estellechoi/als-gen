@@ -1,12 +1,11 @@
 import * as fs from 'fs'
 import * as constants from './constants'
-import { createImage } from './draw'
 import { getGatewayUrlByToken } from './nftStorage'
 import { background, earings, eyes, eyewears, face, hair, lips, nose, Trait } from './traits'
 import { NftTobe, TraitTarget } from './types/common'
 
-const TARGET_NUM_OF_NFT = 500
-const MAX_NUM_OF_FACE_RARITY = 12
+const TARGET_NUM_OF_NFT = 100
+const MAX_NUM_OF_FACE_RARITY = 10
 const MAX_NUM_OF_HAIR_RARITY = 10
 const MAX_NUM_OF_EYES_RARITY = 10
 const MAX_NUM_OF_NOSE_RARITY = 10
@@ -16,6 +15,7 @@ const MAX_NUM_OF_EARINGS_RARITY = 40
 const MAX_NUM_OF_BG_RARITY = 100
 
 const ALSs: NftTobe[] = new Array(TARGET_NUM_OF_NFT)
+
 let totalFaceRareTraits = 0
 let totalHairRareTraits = 0
 let totalEyesRareTraits = 0
@@ -24,7 +24,6 @@ let totalLipsRareTraits = 0
 let totalEyewearsRareTraits = 0
 let totalEaringsRareTraits = 0
 let totalBgRareTraits = 0
-
 
 /**
  * 
@@ -55,29 +54,58 @@ const refineRarity = (traitTarget: TraitTarget, trait: Trait): Trait => {
         
         switch (traitTarget) {
             case TraitTarget.Face: 
-                refine(face, totalFaceRareTraits, MAX_NUM_OF_FACE_RARITY)
-                break
+                totalFaceRareTraits += 1
+                if (totalFaceRareTraits > MAX_NUM_OF_FACE_RARITY) {
+                    totalFaceRareTraits-= 1
+                    return refineRarity(traitTarget, face[randIndexBelow(face.length)])
+                } else return trait
             case TraitTarget.Hair: 
-                refine(hair, totalHairRareTraits, MAX_NUM_OF_HAIR_RARITY)
-                break
+                totalHairRareTraits += 1
+                if (totalHairRareTraits > MAX_NUM_OF_HAIR_RARITY) {
+                    totalHairRareTraits-= 1
+                    return refineRarity(traitTarget, hair[randIndexBelow(hair.length)])
+                } else return trait
+                // refine(hair, totalHairRareTraits, MAX_NUM_OF_HAIR_RARITY)
             case TraitTarget.Eyes: 
-                refine(eyes, totalEyesRareTraits, MAX_NUM_OF_EYES_RARITY)
-                break
+                totalEyesRareTraits += 1
+                if (totalEyesRareTraits > MAX_NUM_OF_EYES_RARITY) {
+                    totalEyesRareTraits-= 1
+                    return refineRarity(traitTarget, eyes[randIndexBelow(eyes.length)])
+                } else return trait
+                // refine(eyes, totalEyesRareTraits, MAX_NUM_OF_EYES_RARITY)
             case TraitTarget.Nose: 
-                refine(nose, totalNoseRareTraits, MAX_NUM_OF_NOSE_RARITY)
-                break
+                totalNoseRareTraits += 1
+                if (totalNoseRareTraits > MAX_NUM_OF_NOSE_RARITY) {
+                    totalNoseRareTraits-= 1
+                    return refineRarity(traitTarget, nose[randIndexBelow(nose.length)])
+                } else return trait
+                // refine(nose, totalNoseRareTraits, MAX_NUM_OF_NOSE_RARITY)
             case TraitTarget.Lips: 
-                refine(lips, totalLipsRareTraits, MAX_NUM_OF_LIPS_RARITY)
-                break
+                totalLipsRareTraits += 1
+                if (totalLipsRareTraits > MAX_NUM_OF_LIPS_RARITY) {
+                    totalLipsRareTraits-= 1
+                    return refineRarity(traitTarget, lips[randIndexBelow(lips.length)])
+                } else return trait
+                // refine(lips, totalLipsRareTraits, MAX_NUM_OF_LIPS_RARITY)
             case TraitTarget.Eyewears: 
-                refine(eyewears, totalEyewearsRareTraits, MAX_NUM_OF_EYEWEARS_RARITY)
-                break
+                totalEyewearsRareTraits += 1
+                if (totalEyewearsRareTraits > MAX_NUM_OF_EYEWEARS_RARITY) {
+                    totalEyewearsRareTraits-= 1
+                    return refineRarity(traitTarget, eyewears[randIndexBelow(eyewears.length)])
+                } else return trait
+                // refine(eyewears, totalEyewearsRareTraits, MAX_NUM_OF_EYEWEARS_RARITY)
             case TraitTarget.Earings: 
-                refine(earings, totalEaringsRareTraits, MAX_NUM_OF_EARINGS_RARITY)
-                break
+                totalEaringsRareTraits += 1
+                if (totalEaringsRareTraits > MAX_NUM_OF_EARINGS_RARITY) {
+                    totalEaringsRareTraits-= 1
+                    return refineRarity(traitTarget, earings[randIndexBelow(earings.length)])
+                } else return trait
             case TraitTarget.Background: 
-                refine(background, totalBgRareTraits, MAX_NUM_OF_BG_RARITY)
-                break
+                totalBgRareTraits += 1
+                if (totalBgRareTraits > MAX_NUM_OF_BG_RARITY) {
+                    totalBgRareTraits-= 1
+                    return refineRarity(traitTarget, background[randIndexBelow(background.length)])
+                } else return trait
             default:
                 return trait
         }
@@ -120,9 +148,11 @@ const generateALSs = () => {
 }
 
 const createALSImages = () => {
+    console.log('Creating images...')
+
     ALSs.forEach(async (ALS, index) => {
-        console.log('Creating an image...')
-        await createImage(ALS, index)
+        console.log(`Creating an image of ALS-${index + 1}`)
+        // await createImage(ALS, index)
     })
 }
 
@@ -142,7 +172,14 @@ const convertMetafileToGatewayUrl = () => {
 generateALSs()
 
 console.log(`TOTAL_NUM_OF_NFT = ${ALSs.length}`)
-console.log(`TOTAL_NUM_OF_RARITY = ${totalFaceRareTraits}`)
+console.log(`TOTAL_NUM_OF_FACE_RARITY = ${totalFaceRareTraits}`)
+console.log(`TOTAL_NUM_OF_HAIR_RARITY = ${totalHairRareTraits}`)
+console.log(`TOTAL_NUM_OF_EYES_RARITY = ${totalEyesRareTraits}`)
+console.log(`TOTAL_NUM_OF_NOSE_RARITY = ${totalNoseRareTraits}`)
+console.log(`TOTAL_NUM_OF_LIPS_RARITY = ${totalLipsRareTraits}`)
+console.log(`TOTAL_NUM_OF_EYEWEARS_RARITY = ${totalEyewearsRareTraits}`)
+console.log(`TOTAL_NUM_OF_EARINGS_RARITY = ${totalEaringsRareTraits}`)
+console.log(`TOTAL_NUM_OF_BG_RARITY = ${totalBgRareTraits}`)
 
 createALSImages()
 convertMetafileToGatewayUrl()
