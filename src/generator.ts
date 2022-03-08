@@ -1,8 +1,8 @@
 import { background, body, face, Trait } from './traits'
 import { NftTobe } from './types/generator'
 
-const TARGET_NUM_OF_NFT = 500
-const RARE_FACE_TRAIT_ID = 77
+const TARGET_NUM_OF_NFT = 100
+const RARE_FACE_TRAIT_ID = 7
 const MAX_NUM_OF_FACE_RARITY = 2
 
 const ALSs: NftTobe[] = new Array(TARGET_NUM_OF_NFT)
