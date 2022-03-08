@@ -5,12 +5,6 @@ import { background, earings, eyes, eyewears, face, hair, lips, nose } from './t
 import { NftTobe, TraitTarget } from './types/common';
 import * as utils from './utils';
 
-
-const FILE_PATH = constants.FILE_PATH
-const FILE_FORMAT = constants.FILE_FORMAT
-
-const client = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY! })
-
 interface MetaData {
     description: string
     name: string
@@ -26,6 +20,9 @@ interface OpenseaAttributes {
     trait_type: string
     value: string
 }
+
+const FILE_PATH = constants.FILE_PATH
+const FILE_FORMAT = constants.FILE_FORMAT
 
 const getOpenseaAttributes = (traitId: number, k: number): OpenseaAttributes => {
     let trait_type: string
@@ -101,7 +98,8 @@ export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<strin
         openseaMetaData.attributes.push(attributes)
     }
 
-    const result = await client.store(metadata)
+    const nftStorage = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY! })
+    const result = await nftStorage.store(metadata)
     // ipfs://bafyreihczimru3w77tved64uyrob2vc6s5kcnfs73q3a5awlpti36p56qu/metadata.json
     console.log(`result.url : ${result.url}`)
     
