@@ -1,24 +1,35 @@
 import { background, body, face, Trait } from './traits'
 import { NftTobe } from './types/generator'
 
+const TARGET_NUM_OF_NFT = 500
 const RARE_FACE_TRAIT_ID = 77
 const MAX_NUM_OF_FACE_RARITY = 2
 
-const TARGET_NUM_OF_NFT = 500
-
-const ALSs: NftTobe[] = new Array(500)
-
-const randIndexBelow = (limit: number) => Math.floor(Math.random() * limit)
-
+const ALSs: NftTobe[] = new Array(TARGET_NUM_OF_NFT)
 let totalFaceRareTraits = 0
 
-// 연속해서 동일한 속성이 선택될 확률은 그렇게 크지 않으므로 무한 recursive 호출은 일어나지는 않을 것입니다.
+/**
+ * 
+ * @param limit 
+ * @returns the random index below the limit number
+ */
+const randIndexBelow = (limit: number): number => Math.floor(Math.random() * limit)
+
+/**
+ * 
+ * @param traitTarget 
+ * @param id 
+ * @param RARE_TRAIT_ID 
+ * @param MAX_NUM_OF_RARITY 
+ * @returns the trait id refined
+ */
 const refineRarity = (traitTarget: Trait[], id: number, RARE_TRAIT_ID: number, MAX_NUM_OF_RARITY: number): number => {
     if (ALSs.length > 0 && id === RARE_TRAIT_ID) {
         totalFaceRareTraits += 1
         
         if (totalFaceRareTraits > MAX_NUM_OF_RARITY) {
             totalFaceRareTraits -= 1
+            // infinite recursive call would not happen since the possibility that same traits are picked continuously is pretty low.
             return refineRarity(traitTarget, traitTarget[randIndexBelow(traitTarget.length)].id, RARE_TRAIT_ID, MAX_NUM_OF_RARITY)
         }
         return id
@@ -27,6 +38,11 @@ const refineRarity = (traitTarget: Trait[], id: number, RARE_TRAIT_ID: number, M
     return id
 }
 
+/**
+ * 
+ * @param ALSs 
+ * @returns a ALS token generated
+ */
 const generateALS = (ALSs: NftTobe[]): NftTobe | null => {
     const nftTobe: NftTobe = []
 
@@ -38,6 +54,9 @@ const generateALS = (ALSs: NftTobe[]): NftTobe | null => {
     return isRedundant? null : nftTobe
 }
 
+/**
+ * generates 500 ALS tokens
+ */
 const generateALSs = () => {
     while (ALSs.length < TARGET_NUM_OF_NFT) {
         const ALS = generateALS(ALSs)
