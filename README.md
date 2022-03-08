@@ -16,6 +16,12 @@ yarn install
 yarn prepare
 ```
 
+### Run and create images and upload metadata
+
+```zsh
+yarn start
+```
+
 <br />
 
 ---
