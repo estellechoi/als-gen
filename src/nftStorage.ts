@@ -1,9 +1,11 @@
 import * as fs from 'fs';
 import { File, NFTStorage, toGatewayURL } from 'nft.storage';
+import path from 'path';
 import * as constants from './constants';
 import { background, earings, eyes, eyewears, face, hair, lips, nose } from './traits';
 import { NftTobe, TraitTarget } from './types/common';
 import * as utils from './utils';
+
 
 interface MetaData {
     description: string
@@ -23,6 +25,9 @@ interface OpenseaAttributes {
 
 const FILE_PATH = constants.FILE_PATH
 const FILE_FORMAT = constants.FILE_FORMAT
+
+const __dirname = path.resolve()
+const basePath = `${__dirname}/${FILE_PATH}`
 
 const getOpenseaAttributes = (traitId: number, k: number): OpenseaAttributes => {
     let trait_type: string
@@ -72,7 +77,7 @@ const getOpenseaAttributes = (traitId: number, k: number): OpenseaAttributes => 
 export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<string> => {
     const fileName = utils.getFileName(ALSId)
     const image = new File(
-        [await fs.promises.readFile(`${FILE_PATH}/_final/${fileName}.${FILE_FORMAT}`)],
+        [await fs.promises.readFile(`${basePath}/_final/${fileName}.${FILE_FORMAT}`)],
         `${fileName}.${FILE_FORMAT}`,
         { type: `image/${FILE_FORMAT}` }
     )
@@ -98,6 +103,9 @@ export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<strin
         openseaMetaData.attributes.push(attributes)
     }
 
+    console.log('metadata', metadata)
+    console.log('token', process.env.NFT_STORAGE_API_KEY)
+
     const nftStorage = new NFTStorage({ token: process.env.NFT_STORAGE_API_KEY! })
     const result = await nftStorage.store(metadata)
     // ipfs://bafyreihczimru3w77tved64uyrob2vc6s5kcnfs73q3a5awlpti36p56qu/metadata.json
@@ -107,8 +115,8 @@ export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<strin
 }
 
 export const saveMetadataUrl = (url: string) => {
-    const fileName = constants.META_FILE_NAME
-    fs.writeFileSync(`./${fileName}.txt`, `${url}\r\n`, { flag: 'a+' })
+    console.log('writeFileSync path', `${basePath}/${constants.META_FILE_NAME}.txt`)
+    fs.writeFileSync(`${basePath}/${constants.META_FILE_NAME}.txt`, `${url}\r\n`, { flag: 'a+' })
     // a+ flag opens file for reading and appending. The file is created if it does not exist.
 }
 

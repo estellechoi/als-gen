@@ -1,8 +1,13 @@
-import * as fs from 'fs'
-import * as constants from './constants'
-import { getGatewayUrlByToken } from './nftStorage'
-import { background, earings, eyes, eyewears, face, hair, lips, nose, Trait } from './traits'
-import { NftTobe, TraitTarget } from './types/common'
+import dotenv from 'dotenv';
+import * as fs from 'fs';
+import path from 'path';
+import * as constants from './constants';
+import { createImage } from './draw';
+import { getGatewayUrlByToken } from './nftStorage';
+import { background, earings, eyes, eyewears, face, hair, lips, nose, Trait } from './traits';
+import { NftTobe, TraitTarget } from './types/common';
+
+dotenv.config()
 
 const TARGET_NUM_OF_NFT = 100
 const MAX_NUM_OF_FACE_RARITY = 10
@@ -14,7 +19,7 @@ const MAX_NUM_OF_EYEWEARS_RARITY = 40
 const MAX_NUM_OF_EARINGS_RARITY = 40
 const MAX_NUM_OF_BG_RARITY = 100
 
-const ALSs: NftTobe[] = new Array(TARGET_NUM_OF_NFT)
+const ALSs: NftTobe[] = []
 
 let totalFaceRareTraits = 0
 let totalHairRareTraits = 0
@@ -24,6 +29,12 @@ let totalLipsRareTraits = 0
 let totalEyewearsRareTraits = 0
 let totalEaringsRareTraits = 0
 let totalBgRareTraits = 0
+
+const FILE_PATH = constants.FILE_PATH
+
+const __dirname = path.resolve()
+const basePath = `${__dirname}/${FILE_PATH}`
+
 
 /**
  * 
@@ -120,6 +131,7 @@ const generateALS = (ALSs: NftTobe[]): NftTobe | null => {
     nftTobe.push(refineRarity(TraitTarget.Earings, earings[randIndexBelow(earings.length)]).id)
     nftTobe.push(refineRarity(TraitTarget.Background, background[randIndexBelow(background.length)]).id)
     
+    // remove redundancy
     const isRedundant = ALSs.some((item: NftTobe) => JSON.stringify(item) === JSON.stringify(nftTobe))
     return isRedundant? null : nftTobe
 }
@@ -129,33 +141,35 @@ const generateALS = (ALSs: NftTobe[]): NftTobe | null => {
  */
 const generateALSs = () => {
     while (ALSs.length < TARGET_NUM_OF_NFT) {
-        const ALS = generateALS(ALSs)
-        if (ALS !== null) {
-            ALSs.push(ALS)
+        const newALS = generateALS(ALSs)
+        if (newALS !== null) {
+            ALSs.push(newALS)
         }
     }
 }
 
-const createALSImages = () => {
+const createALSImages = async() => {
     console.log('Creating images...')
 
-    ALSs.forEach(async (ALS, index) => {
-        console.log(`Creating an image of ALS-${index + 1}`)
-        // await createImage(ALS, index)
-    })
+    // forEach's callback cannot be used with async await
+    for (let i = 0; i < ALSs.length; i += 1) {
+        console.log(`Creating an image of ALS-${i + 1}`)
+        await createImage(ALSs[i], i)
+    }
 }
 
 /**
  * convert ipfs uris to https gateway urls in meta.txt file to fetch via web later
  * to see flags available, check out https://nodejs.org/api/fs.html#file-system-flags
  */
-const convertMetafileToGatewayUrl = () => {
-    ALSs.forEach(async (_, index) => {
-        const gatewayUrl = await getGatewayUrlByToken(index + 1, `./${constants.META_FILE_NAME}.txt`)
+const convertMetafileToGatewayUrl = async () => {
+    console.log('convertMetafileToGatewayUrl')
+    for (let i = 0; i < ALSs.length; i += 1) {
+        const gatewayUrl = await getGatewayUrlByToken(i + 1, `${basePath}/${constants.META_FILE_NAME}.txt`)
         const fileName = `${constants.META_FILE_NAME}.href.txt`
-        fs.writeFileSync(fileName, `${gatewayUrl}\r\n`, { flag: 'a+' })
+        fs.writeFileSync(`${basePath}/${fileName}`, `${gatewayUrl}\r\n`, { flag: 'a+' })
         // a+ flag opens file for reading and appending. The file is created if it does not exist.
-    })
+    }
 }
 
 generateALSs()

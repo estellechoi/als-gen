@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "canvas": "^2.9.0",
+    "dotenv": "^16.0.0",
     "nft.storage": "^6.0.2"
   }
 }
