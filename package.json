@@ -23,6 +23,7 @@
     "start": "tsc && yarn lint && node --experimental-specifier-resolution=node --trace-warnings dist/generator"
   },
   "dependencies": {
+    "@pinata/sdk": "^1.1.23",
     "canvas": "^2.9.0",
     "dotenv": "^16.0.0",
     "nft.storage": "^6.0.2"
