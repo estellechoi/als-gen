@@ -37,11 +37,11 @@ export const createImage = async (ALS: NftTobe, index: number) => {
 
     // stack images from the bottom
     await ctx.drawImage(background, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
+    await ctx.drawImage(hair, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(face, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(eyes, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(nose, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(lips, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
-    await ctx.drawImage(hair, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(hairFront, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(eyewears, 0, 0, CANVAS_SIZE, CANVAS_SIZE)
     await ctx.drawImage(earings, 0, 0, CANVAS_SIZE, CANVAS_SIZE)

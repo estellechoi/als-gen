@@ -172,20 +172,25 @@ const convertMetafileToGatewayUrl = async () => {
     }
 }
 
-generateALSs()
+const start = async () => {
+    generateALSs()
 
-console.log(`TOTAL_NUM_OF_NFT = ${ALSs.length}`)
-console.log(`TOTAL_NUM_OF_FACE_RARITY = ${totalFaceRareTraits}`)
-console.log(`TOTAL_NUM_OF_HAIR_RARITY = ${totalHairRareTraits}`)
-console.log(`TOTAL_NUM_OF_EYES_RARITY = ${totalEyesRareTraits}`)
-console.log(`TOTAL_NUM_OF_NOSE_RARITY = ${totalNoseRareTraits}`)
-console.log(`TOTAL_NUM_OF_LIPS_RARITY = ${totalLipsRareTraits}`)
-console.log(`TOTAL_NUM_OF_EYEWEARS_RARITY = ${totalEyewearsRareTraits}`)
-console.log(`TOTAL_NUM_OF_EARINGS_RARITY = ${totalEaringsRareTraits}`)
-console.log(`TOTAL_NUM_OF_BG_RARITY = ${totalBgRareTraits}`)
+    console.log(`TOTAL_NUM_OF_NFT = ${ALSs.length}`)
+    console.log(`TOTAL_NUM_OF_FACE_RARITY = ${totalFaceRareTraits}`)
+    console.log(`TOTAL_NUM_OF_HAIR_RARITY = ${totalHairRareTraits}`)
+    console.log(`TOTAL_NUM_OF_EYES_RARITY = ${totalEyesRareTraits}`)
+    console.log(`TOTAL_NUM_OF_NOSE_RARITY = ${totalNoseRareTraits}`)
+    console.log(`TOTAL_NUM_OF_LIPS_RARITY = ${totalLipsRareTraits}`)
+    console.log(`TOTAL_NUM_OF_EYEWEARS_RARITY = ${totalEyewearsRareTraits}`)
+    console.log(`TOTAL_NUM_OF_EARINGS_RARITY = ${totalEaringsRareTraits}`)
+    console.log(`TOTAL_NUM_OF_BG_RARITY = ${totalBgRareTraits}`)
+    
+    await createALSImages()
+    await convertMetafileToGatewayUrl()
+}
 
-createALSImages()
-convertMetafileToGatewayUrl()
+start()
+
 
 
 
