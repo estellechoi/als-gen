@@ -76,6 +76,7 @@ const getOpenseaAttributes = (traitId: number, k: number): OpenseaAttributes => 
 
 export const uploadMetaData = async (ALS: NftTobe, ALSId: number): Promise<string> => {
     const fileName = utils.getFileName(ALSId)
+    
     const image = new File(
         [await fs.promises.readFile(`${basePath}/_final/${fileName}.${FILE_FORMAT}`)],
         `${fileName}.${FILE_FORMAT}`,
